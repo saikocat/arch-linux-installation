@@ -83,7 +83,7 @@ genfstab -t PARTUUID -p /mnt >> /mnt/etc/fstab
 
 # timeZone
 echo ":: Setting time zone"
-ln -sf /usr/share/zoneinfo/${timezone} /mnt/etc/localtime
+ln -sf /usr/share/zoneinfo/${TIMEZONE} /mnt/etc/localtime
 
 # locale
 echo ":: Setting and generating locale"
