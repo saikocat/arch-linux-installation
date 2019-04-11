@@ -109,6 +109,9 @@ echo ":: Microcode detection"
 grep -q -i "vendor_id.*intel" /proc/cpuinfo && pacstrap /mnt intel-ucode
 grep -q -i "vendor_id.*amd" /proc/cpuinfo && pacstrap /mnt amd-ucode
 
+# install essentials
+pacstrap /mnt dialog vim
+
 # initramfs
 echo ":: Setting initramfs with SD & LVM"
 sed -i -f "tasks/enable-initramfs-hooks-sd-lvm2/mkinitcpio.sed" /mnt/etc/mkinitcpio.conf
