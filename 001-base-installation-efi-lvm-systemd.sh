@@ -131,5 +131,7 @@ $(grep -i "vendor_id.*\(amd\|intel\)"  /proc/cpuinfo | head -n1 | \
     sed 's/.*\(intel\|amd\).*/\L\1/i' | \
     xargs -I {} echo -e "initrd   /{}-ucode.img")
 initrd   /initramfs-linux.img
-options  root=PARTUUID=$(blkid -s PARTUUID -o value "${LVM_PARTITION}") rw
+options  root=/dev/${VGROUP}/root-lv rw
 EOF
+
+umount -R /mnt
