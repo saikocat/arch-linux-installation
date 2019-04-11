@@ -11,7 +11,7 @@ exec 2> >(tee "stderr.log")
 DISK=$1
 TIMEZONE="Asia/Singapore"
 HOSTNAME="shingetsu"
-LANGUAGE="SG"
+LANGUAGE="en_SG"
 
 # Update system clock to ensure accuracy
 timedatectl set-ntp true
@@ -89,7 +89,6 @@ ln -sf /usr/share/zoneinfo/${TIMEZONE} /mnt/etc/localtime
 echo ":: Setting and generating locale"
 echo "${LANGUAGE}.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch-chroot /mnt locale-gen
-arch-chroot /mnt export LANG=${LANGUAGE}.UTF-8
 echo "LANG=${LANGUAGE}.UTF-8" > /mnt/etc/locale.conf
 
 # hidpi vconsole font
