@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 ### WARNING: UNTESTED ###
+# setfont -v latarcyrheb-sun32 # hidpi
 set -uo pipefail
 trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
@@ -10,9 +11,12 @@ exec 2> >(tee "stderr.log")
 DISK=$1
 TIMEZONE="Asia/Singapore"
 HOSTNAME="shingetsu"
+LANGUAGE="SG"
 
 # Update system clock to ensure accuracy
 timedatectl set-ntp true
+timedatectl set-timezone ${TIMEZONE}
+hwclock --systohc
 
 # Prepare Disk & Partitions
 echo ":: Prepare disk wipe & partitioning ..."
@@ -73,16 +77,49 @@ mount "/dev/$VGROUP/home-lv" /mnt/home
 
 # bootstrap
 pacstrap /mnt base base-devel
+
+# fstab - use PARTUUID as source identifier, -p exclude pseudofs mounts
+genfstab -t PARTUUID -p /mnt >> /mnt/etc/fstab
+
+# timeZone
+echo ":: Setting time zone"
+ln -sf /usr/share/zoneinfo/${timezone} /mnt/etc/localtime
+
+# locale
+echo ":: Setting and generating locale"
+echo "${LANGUAGE}.UTF-8 UTF-8" >> /mnt/etc/locale.gen
+arch-chroot /mnt locale-gen
+arch-chroot /mnt export LANG=${LANGUAGE}.UTF-8
+echo "LANG=${LANGUAGE}.UTF-8" > /mnt/etc/locale.conf
+
+# hidpi vconsole font
+# arch-chroot /mnt pacman -S terminus-font
+# echo "FONT=ter-132n" > /mnt/etc/vconsole.conf
+
+# hostname
+echo ":: Setting hostname"
+echo "${HOSTNAME}" > /mnt/etc/hostname
+
+# network
+echo ":: Installing network"
+arch-chroot /mnt pacman --noconfirm -S networkmanager wget
+arch-chroot /mnt systemctl enable NetworkManager
+
 # microcode
+echo ":: Microcode detection"
 grep -q -i "vendor_id.*intel" /proc/cpuinfo && pacstrap /mnt intel-ucode
 grep -q -i "vendor_id.*amd" /proc/cpuinfo && pacstrap /mnt amd-ucode
 
-# Use PARTUUID as source identifier, -p exclude pseudofs mounts
-genfstab -t PARTUUID -p /mnt >> /mnt/etc/fstab
+# initramfs
+echo ":: Setting initramfs with SD & LVM"
+sed -i -f "tasks/enable-initramfs-hooks-sd-lvm2/mkinitcpio.sed" /mnt/etc/mkinitcpio.conf
+arch-chroot /mnt mkinitcpio -p linux
+
 # Boot stuff
 arch-chroot /mnt bootctl install
 cat <<EOF > /mnt/boot/loader/loader.conf
 default arch
+timeout 3
 EOF
 
 cat <<EOF > /mnt/boot/loader/entries/arch.conf
@@ -94,34 +131,3 @@ $(grep -i "vendor_id.*\(amd\|intel\)"  /proc/cpuinfo | head -n1 | \
 initrd   /initramfs-linux.img
 options  root=PARTUUID=$(blkid -s PARTUUID -o value "${LVM_PARTITION}") rw
 EOF
-
-# LVM
-sed -i -f "tasks/enable-initramfs-hooks-sd-lvm2/mkinitcpio.sed" /mnt/etc/mkinitcpio.conf
-arch-chroot /mnt mkinitcpio -p linux
-
-# Locale
-cat >>"/mnt/etc/locale.gen" <<EOF
-en_SG.UTF-8 UTF-8
-EOF
-
-arch-chroot /mnt/ locale-gen
-
-# cat >"/mnt/root/default-environment" <<EOF
-# HOSTNAME=${HOSTNAME}
-# TIMEZONE=${TIMEZONE}
-# EOF
-# 
-# SYSTEMD_START_FILE="/mnt/etc/systemd/system/multi-user.target.wants/init-system.service"
-# cat >"$SYSTEMD_START_FILE" <<EOF
-# [Service]
-# Type=oneshot
-# EnvironmentFile=/root/default-environment
-# ExecStart=/usr/bin/localectl set-locale LANG=en_SG.UTF-8
-# ExecStart=/usr/bin/hostnamectl set-hostname $HOSTNAME
-# ExecStart=/usr/bin/timedatectl set-ntp 1
-# ExecStart=/usr/bin/timedatectl set-timezone $TIMEZONE
-# ExecStart=/bin/systemctl poweroff
-# EOF
-# 
-# systemd-nspawn -D /mnt -b
-# rm "$SYSTEMD_START_FILE"
