@@ -29,6 +29,10 @@ echo ":: HiDPI for vconsole"
 pacstrap /mnt terminus-font
 echo "FONT=ter-132n" > /mnt/etc/vconsole.conf
 
+echo ":: Journald log size max ..."
+# WARNING: not idempotent - need sed
+echo "SystemMaxUse=100M" >> /mnt/etc/systemd/journald.conf
+
 echo ":: Pacman contrib"
 pacstrap /mnt pacman-contrib
 install -Dm0644 system-config/pacmand-hooks-remove-old-cache.hook /mnt/etc/pacman.d/hooks/remove-old-cache.hook
