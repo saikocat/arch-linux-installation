@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ### WARNING: UNTESTED ###
 # setfont -v latarcyrheb-sun32 # hidpi
+# TODO: trap on SIGHUP SIGINT SIGTERM
 set -uo pipefail
 trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
@@ -78,8 +79,8 @@ mount "/dev/$VGROUP/home-lv" /mnt/home
 # bootstrap
 pacstrap /mnt base base-devel
 
-# fstab - use PARTUUID as source identifier, -p exclude pseudofs mounts
-genfstab -t PARTUUID -p /mnt >> /mnt/etc/fstab
+# fstab - use UUID as source identifier, -p exclude pseudofs mounts
+genfstab -U -p /mnt >> /mnt/etc/fstab
 
 # timeZone
 echo ":: Setting time zone"
@@ -109,8 +110,8 @@ echo ":: Microcode detection"
 grep -q -i "vendor_id.*intel" /proc/cpuinfo && pacstrap /mnt intel-ucode
 grep -q -i "vendor_id.*amd" /proc/cpuinfo && pacstrap /mnt amd-ucode
 
-# install essentials
-pacstrap /mnt dialog vim
+# install essentials - for me :(
+pacstrap /mnt dialog rsync netcat pv vim
 
 # initramfs
 echo ":: Setting initramfs with SD & LVM"
@@ -133,5 +134,3 @@ $(grep -i "vendor_id.*\(amd\|intel\)"  /proc/cpuinfo | head -n1 | \
 initrd   /initramfs-linux.img
 options  root=/dev/${VGROUP}/root-lv rw
 EOF
-
-umount -R /mnt
