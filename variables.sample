@@ -1,0 +1,5 @@
+DISK=/dev/sdaX
+TIMEZONE="Asia/Singapore"
+HOSTNAME="shingetsu"
+LANGUAGE="en_SG"
+ROOT_LV_SIZE=64G

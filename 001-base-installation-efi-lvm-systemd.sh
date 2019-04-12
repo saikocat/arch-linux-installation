@@ -9,10 +9,8 @@ trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 exec 1> >(tee "stdout.log")
 exec 2> >(tee "stderr.log")
 
-DISK=$1
-TIMEZONE="Asia/Singapore"
-HOSTNAME="shingetsu"
-LANGUAGE="en_SG"
+# better create it from the sample variables
+source ./variables
 
 # Update system clock to ensure accuracy
 timedatectl set-ntp true
@@ -60,7 +58,7 @@ pvdisplay
 vgcreate ${VGROUP} ${LVM_PARTITION}
 vgdisplay
 
-lvcreate ${VGROUP} --size 64G --name root-lv
+lvcreate ${VGROUP} --size ${ROOT_LV_SIZE} --name root-lv
 lvcreate ${VGROUP} --extents +100%FREE --name home-lv
 lvdisplay
 
