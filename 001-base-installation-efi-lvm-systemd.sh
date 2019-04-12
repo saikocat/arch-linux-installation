@@ -108,8 +108,8 @@ echo ":: Microcode detection"
 grep -q -i "vendor_id.*intel" /proc/cpuinfo && pacstrap /mnt intel-ucode
 grep -q -i "vendor_id.*amd" /proc/cpuinfo && pacstrap /mnt amd-ucode
 
-# install essentials - for me :(
-pacstrap /mnt dialog rsync netcat pv vim
+# install essentials - at least for wifi-menu
+pacstrap /mnt dialog
 
 # initramfs
 echo ":: Setting initramfs with SD & LVM"

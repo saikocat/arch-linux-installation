@@ -1,4 +1,4 @@
-DISK=/dev/sdaX
+DISK=/dev/sdX
 TIMEZONE="Asia/Singapore"
 HOSTNAME="shingetsu"
 LANGUAGE="en_SG"
