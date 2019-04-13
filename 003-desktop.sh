@@ -31,7 +31,7 @@ systemctl enable org.cups.cupsd.service
 
 pacman -S --noconfirm plasma-desktop plasma-nm plasma-workspace sddm \
     phonon-qt5-gstreamer phonon-qt5-vlc kinfocenter kscreen kscreenlocker \
-    kmenuedit kwalletmanager ksysguard kwin breeze breeze-gtk kwrite \
+    kmenuedit kwalletmanager ksysguard kwin breeze breeze-gtk kwrite kactivities \
     kde-cli-tools kde-gtk-config kdecoration kdeplasma-addons kgamma5 khotkeys \
     latte-dock powerdevil bluedevil yakuake \
     konsole yakuake dolphin ark spectacle okular gwenview adapta-gtk-theme \
@@ -41,7 +41,6 @@ pacman -S --noconfirm plasma-desktop plasma-nm plasma-workspace sddm \
     gstreamer-vaapi libva-intel-driver mpv  \
     transmission-qt remmina
 systemctl enable sddm.service
-systemctl enable bluetooth.service
 
 pacman -S --noconfirm libreoffice-still hunspell-en_GB ibus-unikey
 
@@ -59,7 +58,12 @@ pacman -S --noconfirm libreoffice-still hunspell-en_GB ibus-unikey
 # yay -c -Sc
 # libinput-gestures  mill yay-bin stack-static
 
-# yay -S telegram-desktop
+# yay -S telegram-desktop drive-bin
+
+# setup bluetooth
+# systemctl enable bluetooth.service
+
+# packagekit-qt5 # fwupd-backend
 
 # tar cvpf - . |  pv | netcat -l -w 5 -q 5  -p 9999
 # netcat -w 5 -q 5 192.168.1.68 9999 | pv |  tar xvpf -
