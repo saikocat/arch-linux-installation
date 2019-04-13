@@ -7,7 +7,7 @@ trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 exec 1> >(tee "stdout.2.log")
 exec 2> >(tee "stderr.2.log")
 
-pacstrap /mnt rsync netcat pv vim fzf git
+pacstrap /mnt rsync pv vim fzf git
 
 echo ":: System Config ..."
 install -Dm0644 system-config/mod-speakerbeep.conf /mnt/etc/modprobe.d/mod-speakerbeep.conf
