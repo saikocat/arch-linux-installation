@@ -29,14 +29,14 @@ pacman -S --noconfirm ttf-liberation powerline-fonts ttf-croscore ttf-carlito tt
 pacman -S --noconfirm cups foomatic-db-engine foomatic-db foomatic-db-ppds foomatic-db-nonfree-ppds foomatic-db-gutenprint-ppds
 systemctl enable org.cups.cupsd.service
 
-pacman -S --noconfirm plasma-desktop plasma-nm plasma-workspace sddm \
+pacman -S --noconfirm plasma-desktop plasma-nm plasma-workspace sddm sddm-kcm \
     phonon-qt5-gstreamer phonon-qt5-vlc kinfocenter kscreen kscreenlocker \
     kmenuedit kwalletmanager ksysguard kwin breeze breeze-gtk kwrite kactivities \
     kde-cli-tools kde-gtk-config kdecoration kdeplasma-addons kgamma5 khotkeys \
-    latte-dock powerdevil bluedevil yakuake \
+    latte-dock powerdevil bluedevil yakuake plasma-pa discover \
     konsole yakuake dolphin ark spectacle okular gwenview adapta-gtk-theme \
     chromium firefox mcomix keepassx kdeconnect \
-    pulseaudio pulseaudio-bluetooth pavucontrol-qt \
+    pulseaudio pulseaudio-bluetooth pavucontrol-qt pulseaudio-alsa \
     alsa gstreamer gst-plugins-good gst-plugins-ugly gst-libav \
     gstreamer-vaapi libva-intel-driver mpv  \
     transmission-qt remmina
@@ -58,7 +58,7 @@ pacman -S --noconfirm libreoffice-still hunspell-en_GB ibus-unikey
 # yay -c -Sc
 # libinput-gestures  mill yay-bin stack-static
 
-# yay -S telegram-desktop drive-bin
+# yay -S telegram-desktop drive-bin inxi
 
 # setup bluetooth
 # systemctl enable bluetooth.service
