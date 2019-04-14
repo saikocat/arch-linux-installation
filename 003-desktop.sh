@@ -23,7 +23,7 @@ systemctl enable sshd.socket sshd@.service
 
 pacman -S --noconfirm unrar unzip tmux tree fwupd openbsd-netcat p7zip stow nfs-utils crda fzf
 
-pacman -S --noconfirm xorg-server xorg-xrandr
+pacman -S --noconfirm xorg-server xorg-xrandr xorg-xdpyinfo mesa-demos
 pacman -S --noconfirm ttf-liberation powerline-fonts ttf-croscore ttf-carlito ttf-caladea ttf-fira-code adobe-source-code-pro-fonts otf-ipafont
 
 pacman -S --noconfirm cups foomatic-db-engine foomatic-db foomatic-db-ppds foomatic-db-nonfree-ppds foomatic-db-gutenprint-ppds
@@ -56,7 +56,7 @@ pacman -S --noconfirm libreoffice-still hunspell-en_GB ibus-unikey
 
 # yay -S nvme-cli nerd-fonts-source-code-pro otf-san-francisco otf-sfmono ttf-public-sans pandoc-bin
 # yay -c -Sc
-# libinput-gestures  mill yay-bin stack-static
+# libinput-gestures  mill yay-bin stack-static ripgrep
 
 # yay -S telegram-desktop drive-bin inxi
 

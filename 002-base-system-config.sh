@@ -28,6 +28,7 @@ arch-chroot /mnt systemctl enable systemd-swap
 echo ":: HiDPI for vconsole"
 pacstrap /mnt terminus-font
 echo "FONT=ter-132n" > /mnt/etc/vconsole.conf
+# TODO: sed mkinitcpio.conf to include sd-vconsole hook
 
 echo ":: Journald log size max ..."
 # WARNING: not idempotent - need sed
